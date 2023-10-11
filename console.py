@@ -8,7 +8,6 @@ import readline
 import sys
 
 
-
 class HBNBCommand(cmd.Cmd):
     """
     HBNBCommand - Python Console for HBNB Project
@@ -32,7 +31,7 @@ class HBNBCommand(cmd.Cmd):
 
     @classmethod
     def classes(cls):
-        """ getter of __classes to can use it in other modules """
+        """getter of __classes to can use it in other modules"""
         return HBNBCommand.__classes
 
     def do_quit(self, args):
@@ -287,7 +286,9 @@ class HBNBCommand(cmd.Cmd):
         except AttributeError:
             # if the attribute does'nt exists in the object
             setattr(
-                needed_obj, splitted_args[2], " ".join(splitted_args[3:]).strip("'\"")
+                needed_obj,
+                splitted_args[2],
+                " ".join(splitted_args[3:]).strip("'\""),
             )
             needed_obj.save()
 
@@ -296,7 +297,8 @@ class HBNBCommand(cmd.Cmd):
         Display help information for the 'update' command.
         """
         print(
-            "Updates an instance based on the class name and id by adding or updating attribute (save the change into the JSON file)"
+            """Updates an instance based on the class name and id 
+            by adding or updating attribute"""
         )
         print("Usage: update <class> <id> <attribute> <value>")
 

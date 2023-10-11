@@ -2,9 +2,11 @@
 
 import cmd
 from models.base_model import BaseModel
+from models.user import User
 from models import storage
 import readline
 import sys
+
 
 
 class HBNBCommand(cmd.Cmd):
@@ -26,7 +28,12 @@ class HBNBCommand(cmd.Cmd):
     misc_header = "Additional Information"
     ruler = "="
 
-    __classes = {"BaseModel": BaseModel}
+    __classes = {"BaseModel": BaseModel, "User": User}
+
+    @classmethod
+    def classes(cls):
+        """ getter of __classes to can use it in other modules """
+        return HBNBCommand.__classes
 
     def do_quit(self, args):
         """
@@ -276,11 +283,13 @@ class HBNBCommand(cmd.Cmd):
             attr_type = type(getattr(needed_obj, splitted_args[2]))
             new_value = attr_type(" ".join(splitted_args[3:]).strip("'\""))
             setattr(needed_obj, splitted_args[2], new_value)
+            needed_obj.save()
         except AttributeError:
             # if the attribute does'nt exists in the object
             setattr(
                 needed_obj, splitted_args[2], " ".join(splitted_args[3:]).strip("'\"")
             )
+            needed_obj.save()
 
     def help_update(self):
         """

@@ -27,6 +27,8 @@ class BaseModel:
     def __init__(self, *args, **kwargs):
         """
         Initializes an instance of the BaseModel class
+
+        kwargs: key, value pairs each key will be an attribute
         """
         if kwargs is not None and len(kwargs.keys()) > 0:
             temp = kwargs.copy()

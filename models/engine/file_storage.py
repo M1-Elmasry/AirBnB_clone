@@ -9,6 +9,7 @@ storing json objects, deserializing json objects
 import json
 
 
+
 class FileStorage:
     """
     FileStorage class responsible for serializing objects to JSON format,
@@ -56,20 +57,21 @@ class FileStorage:
         """
         try:
             with open(FileStorage.__file_path, "r") as file:
-                from models.base_model import BaseModel
+                from console import HBNBCommand
 
                 temp = json.load(file)
                 # we should return the dict object (the values of keys in the temp dict) to BaseModel objects
                 # the loaded objects will be like This
-                # {BaseModel.id: {created_at:..., updated_at:...., __class__: ..., ...}}
+                # {<class_name>.id: {created_at:..., updated_at:...., __class__: ..., ...}}
                 # and we want to return the value to object to be like This
-                # {BaseModel.id: obj}
+                # {<class_name>.id: obj}
                 # why ?, because when add new objects to `__objects` and want to save it
                 # with above save method it iterate over `__objects` and call to_dict() method
                 # if we didn't return the values to BaseModel object we will acts like This
                 # {created_at:..., ...}.to_dict() and this will raise error because dict object
                 # deos'nt have to_dict() method, the owner of to_dict method is BaseModel, got it?
                 for key, value in temp.items():
-                    self.all()[key] = BaseModel(**value)
+                    class_name = key.split(".")[0]
+                    self.all()[key] = HBNBCommand.classes()[class_name](**value)
         except FileNotFoundError:
             pass

@@ -79,7 +79,7 @@ class HBNBCommand(cmd.Cmd):
         """getter of __classes to can use it in other modules"""
         return HBNBCommand.__classes
 
-    def do_quit(self):
+    def do_quit(self, args):
         """
         Quit the interpreter.
         This command allows the user to exit the interpreter gracefully.
@@ -93,7 +93,7 @@ class HBNBCommand(cmd.Cmd):
         print("quit command to exit the interpreter")
         print("Usage: quit")
 
-    def do_EOF(self):
+    def do_EOF(self, args):
         """
         Quit the interpreter.
         This command allows the user to exit the interpreter

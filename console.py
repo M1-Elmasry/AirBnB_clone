@@ -1,4 +1,20 @@
 #!/usr/bin/python3
+"""
+This module implements a Python Console for the AirBnB Project.
+
+It provides a command-line interpreter for interact with
+the AirBnB project by performing various commands.
+
+The commands provided by this module include creating new instances,
+displaying information about instances, updating attributes, and more.
+
+It utilizes classes and modules from the AirBnB project 
+to manage and manipulate data.
+
+This module is designed to work with the AirBnB project's data models,
+such as BaseModel, User, City, Place, Review, State, and Amenity,
+and uses the storage module to manage data storage and retrieval.
+"""
 
 import sys
 import cmd

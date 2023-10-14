@@ -1,25 +1,30 @@
 #!/usr/bin/python3
 
-import cmd
+from cmd import Cmd
+from models import amenity
+from models.amenity import Amenity
 from models.base_model import BaseModel
+from models.city import City
+from models.place import Place
+from models.review import Review
+from models.state import State
 from models.user import User
 from models import storage
-import readline
-import sys
 
 
-class HBNBCommand(cmd.Cmd):
+class HBNBCommand(Cmd):
     """
     HBNBCommand - Python Console for HBNB Project
 
-    This class implements a simple command-line interpreter for the HBNB project.
+    This class implements a simple command-line interpreter.
     Users can interact with the interpreter to perform various commands.
 
     Attributes:
         prompt (str): The command prompt for the interpreter.
         doc_header (str): Header for documented commands.
         misc_header (str): Header for additional information.
-        ruler (str): The character used to create separation lines in the help output.
+        ruler (str): The character used to create
+        separation lines in the help output.
     """
 
     prompt = "(hbnb) "
@@ -27,7 +32,30 @@ class HBNBCommand(cmd.Cmd):
     misc_header = "Additional Information"
     ruler = "="
 
-    __classes = {"BaseModel": BaseModel, "User": User}
+    __classes = {
+        "BaseModel": BaseModel,
+        "User": User,
+        "City": City,
+        "Place": Place,
+        "Review": Review,
+        "State": State,
+        "Amenity": Amenity,
+    }
+    __types = {
+        "name": str,
+        "stat_id": str,
+        "city_id": str,
+        "user_id": str,
+        "description": str,
+        "number_rooms": int,
+        "number_bathrooms": int,
+        "max_guest": int,
+        "price_by_night": int,
+        "latitude": float,
+        "longitude": float,
+        "place_id": str,
+        "text": str,
+    }
 
     @classmethod
     def classes(cls):
@@ -60,7 +88,8 @@ class HBNBCommand(cmd.Cmd):
         """
         Quit the interpreter.
 
-        This command allows the user to exit the interpreter gracefully using the EOF (End of File) input.
+        This command allows the user to exit the interpreter
+        gracefully using the EOF (End of File) input.
 
         Args:
             args (str): Any additional arguments passed with the command.
@@ -82,6 +111,7 @@ class HBNBCommand(cmd.Cmd):
         """
         Creates a new instance of specific class (first word in @args),
         and saves it (to the JSON file) and prints it's id
+        ex: create <class_name>
 
         Args:
             args (str): Any additional arguments passed with the command.
@@ -108,7 +138,8 @@ class HBNBCommand(cmd.Cmd):
 
     def do_show(self, args):
         """
-        Prints the string representation of an instance based on the class name and id
+        Prints the string representation of an instance based on
+        the class name and id
         ex: show <class> <id>
 
         Args:
@@ -135,10 +166,10 @@ class HBNBCommand(cmd.Cmd):
             return
 
         try:
-            all_objects_stored = storage.all()
+            all_stored_objects = storage.all()
             id = splitted_args[1]
             key = f"{class_name}.{id}"
-            obj_str = all_objects_stored[key]
+            obj_str = all_stored_objects[key]
             print(obj_str)
         except KeyError:
             print("** no instance found **")
@@ -149,13 +180,14 @@ class HBNBCommand(cmd.Cmd):
         Display help information for the 'show' command.
         """
         print(
-            "Prints the string representation of an instance based on the class name and id"
+            "Prints the str repr of an instance based on the class name and id"
         )
         print("Usage: show <class> <id>")
 
     def do_destroy(self, args):
         """
-        Deletes an instance based on the class name and id (save the change into the JSON file).
+        Deletes an instance based on the class name and id
+        (and save the changes).
         Ex: destroy <class> <id>
 
         Args:
@@ -194,14 +226,14 @@ class HBNBCommand(cmd.Cmd):
         """
         Display help information for the 'destroy' command.
         """
-        print(
-            "Deletes an instance based on the class name and id (save the change into the JSON file)"
-        )
+        print("Deletes an instance based on the")
+        print("class name and id (and save the changes)")
         print("Usage: show <class> <id>")
 
     def do_all(self, args):
         """
-        Prints all string representation of all instances based or not on the class name.
+        Prints all string representation of all
+        instances based or not on the class name.
         Ex: `all BaseModel` or `all`.
         """
         splitted_args = args.split(" ")
@@ -228,14 +260,14 @@ class HBNBCommand(cmd.Cmd):
         """
         Display help information for the 'all' command.
         """
-        print(
-            "Prints all string representation of all instances based or not on the class name."
-        )
+        print("Prints all string representation of")
+        print("all instances based or not on the class name.")
         print("Usage: `all <class>` or `all`")
 
     def do_update(self, args):
         """
-        Updates an instance based on the class name and id by adding or updating attribute (save the change into the JSON file)
+        Updates an instance based on the class name and id by
+        adding or updating attribute (and save the changes)
         Ex: update <class> <id> <attribute> <value>
 
         Args:
@@ -277,29 +309,48 @@ class HBNBCommand(cmd.Cmd):
             print("* value missing **")
             return
 
+        attr_name = splitted_args[2]
+        attr_value = splitted_args[3:]
+
         try:
             # if the attribute already exists in the object
-            attr_type = type(getattr(needed_obj, splitted_args[2]))
-            new_value = attr_type(" ".join(splitted_args[3:]).strip("'\""))
-            setattr(needed_obj, splitted_args[2], new_value)
+            # the error may raises from below line
+            attr_type = type(getattr(needed_obj, attr_name))
+            # if the value of the attribute
+            # like this > "value" or 'value'
+            # (the string include single/double qoutes)
+            # remove single/double qoutes
+            casted_attr_value = attr_type(" ".join(attr_value).strip("'\""))
+            # set the new attr and save it
+            setattr(needed_obj, attr_name, casted_attr_value)
             needed_obj.save()
         except AttributeError:
-            # if the attribute does'nt exists in the object
-            setattr(
-                needed_obj,
-                splitted_args[2],
-                " ".join(splitted_args[3:]).strip("'\""),
-            )
-            needed_obj.save()
+            try:
+                # if the attribute does'nt exists in the object
+                # and type exists in (HBNBCommand.__types)
+                attr_type = HBNBCommand.__types[attr_name]
+                setattr(
+                    needed_obj,
+                    attr_name,
+                    attr_type(" ".join(attr_value).strip("'\"")),
+                )
+                needed_obj.save()
+            except AttributeError:
+                # if the attr not exists in the object
+                # and the name of it not exists in (HBNBCommand.__types)
+                setattr(
+                    needed_obj,
+                    attr_name,
+                    " ".join(attr_value).strip("'\""),
+                )
+                needed_obj.save()
 
     def help_update(self):
         """
         Display help information for the 'update' command.
         """
-        print(
-            """Updates an instance based on the class name and id 
-            by adding or updating attribute"""
-        )
+        print("Updates an instance based on the class name and id")
+        print("by adding or updating attribute")
         print("Usage: update <class> <id> <attribute> <value>")
 
     def emptyline(self):

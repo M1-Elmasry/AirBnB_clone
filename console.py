@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import sys
 from cmd import Cmd
 from models import amenity
 from models.amenity import Amenity
@@ -27,7 +28,7 @@ class HBNBCommand(Cmd):
         separation lines in the help output.
     """
 
-    prompt = "(hbnb) "
+    prompt = "(hbnb) " if sys.stdin.isatty() else ""
     doc_header = "Documented commands (type help <topic>):"
     misc_header = "Additional Information"
     ruler = "="

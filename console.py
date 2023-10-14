@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 import sys
-from cmd import Cmd
+import cmd
 from models import amenity
 from models.amenity import Amenity
 from models.base_model import BaseModel
@@ -13,7 +13,7 @@ from models.user import User
 from models import storage
 
 
-class HBNBCommand(Cmd):
+class HBNBCommand(cmd.Cmd):
     """
     HBNBCommand - Python Console for HBNB Project
 

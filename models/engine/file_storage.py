@@ -2,12 +2,11 @@
 """
 representing a FileStorage Class
 
-This module defines the `FileStorage` class, 
+This module defines the `FileStorage` class,
 which is responsible for serializing objects to json objects,
 storing json objects, deserializing json objects
 """
 import json
-
 
 
 class FileStorage:
@@ -19,12 +18,13 @@ class FileStorage:
         __file_path (str): The path to the JSON file where objects are stored.
         __objects (dict): A dictionary that holds objects in memory.
     """
+
     __file_path = "file.json"
     __objects = {}
 
     def all(self):
         """
-        Retrieves a dictionary containing all objects currently loaded in memory.
+        Return a dictionary containing all objects currently loaded in memory.
         """
         return FileStorage.__objects
 
@@ -40,7 +40,8 @@ class FileStorage:
 
     def save(self):
         """
-        Serializes and saves all objects in __objects to a JSON file (__file_path).
+        Serializes and saves all objects in __objects
+        to a JSON file (__file_path).
         """
         serialized_objects = {}
         for k, v in self.all().items():
@@ -51,8 +52,10 @@ class FileStorage:
 
     def reload(self):
         """
-        Loads objects from the JSON file (__file_path) into memory and deserializes them
-        into their respective object instances. This method is typically called when the program starts
+        Loads objects from the JSON file (__file_path)
+        into memory and deserializes them
+        into their respective object instances.
+        This method is typically called when the program starts
         to populate the __objects dictionary with data from the file.
         """
         try:
@@ -60,18 +63,23 @@ class FileStorage:
                 from console import HBNBCommand
 
                 temp = json.load(file)
-                # we should return the dict object (the values of keys in the temp dict) to BaseModel objects
+                # we should return the dict object
+                # (the values of keys in the temp dict) to BaseModel objects
                 # the loaded objects will be like This
-                # {<class_name>.id: {created_at:..., updated_at:...., __class__: ..., ...}}
+                # {<class_name>.id: {created_at:..., updated_at:...., ...}}
                 # and we want to return the value to object to be like This
                 # {<class_name>.id: obj}
-                # why ?, because when add new objects to `__objects` and want to save it
-                # with above save method it iterate over `__objects` and call to_dict() method
-                # if we didn't return the values to BaseModel object we will acts like This
-                # {created_at:..., ...}.to_dict() and this will raise error because dict object
-                # deos'nt have to_dict() method, the owner of to_dict method is BaseModel, got it?
+                # why ?,
+                # because when add new objs to `__objects` and want to save it
+                # with above save method it iterate over `__objects`
+                # and call to_dict() method
+                # if we didn't return the values to BaseModel object
+                # we will acts like This
+                # {created_at:..., ...}.to_dict() and this will raise error
+                # because dict object deos'nt have to_dict() method,
+                # the owner of to_dict method is BaseModel, got it?
                 for key, value in temp.items():
-                    class_name = key.split(".")[0]
-                    self.all()[key] = HBNBCommand.classes()[class_name](**value)
+                    cls_name = key.split(".")[0]
+                    self.all()[key] = HBNBCommand.classes()[cls_name](**value)
         except FileNotFoundError:
             pass

@@ -1,4 +1,4 @@
-#/usr/bin/python3
+# /usr/bin/python3
 import unittest
 import models
 import os
@@ -6,9 +6,10 @@ from models.base_model import BaseModel
 from time import sleep
 from datetime import datetime
 
+
 class test_inistaitiation(unittest.TestCase):
-    """In case args = None
-    """
+    """In case args = None"""
+
     def test_no_args(self):
         self.assertEqual(BaseModel, type(BaseModel()))
 
@@ -46,13 +47,13 @@ class test_inistaitiation(unittest.TestCase):
         self.assertNotIn(None, base_model.__dict__.values())
 
     def test_str_repr(self):
-        date_time = datetime.today() # As example
-        date_time_repr = repr(date_time) # Date representation
-        model = BaseModel() # Make an object
-        model.id = "885520" # init an id
-        model.created_at = date_time # init created at
-        model.updated_at = date_time #init updated at
-        model_string_rep = model.__str__() # string represetaion of model
+        date_time = datetime.today()  # As example
+        date_time_repr = repr(date_time)  # Date representation
+        model = BaseModel()  # Make an object
+        model.id = "885520"  # init an id
+        model.created_at = date_time  # init created at
+        model.updated_at = date_time  # init updated at
+        model_string_rep = model.__str__()  # string represetaion of model
 
         self.assertIn("[BaseModel] (885520)", model_string_rep)
         self.assertIn("'id': '885520'", model_string_rep)
@@ -62,7 +63,6 @@ class test_inistaitiation(unittest.TestCase):
     """
     In case passed args are not non
     """
-
 
 
 if __name__ == "__main__":

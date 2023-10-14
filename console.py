@@ -8,7 +8,7 @@ the AirBnB project by performing various commands.
 The commands provided by this module include creating new instances,
 displaying information about instances, updating attributes, and more.
 
-It utilizes classes and modules from the AirBnB project 
+It utilizes classes and modules from the AirBnB project
 to manage and manipulate data.
 
 This module is designed to work with the AirBnB project's data models,
@@ -79,20 +79,12 @@ class HBNBCommand(cmd.Cmd):
         """getter of __classes to can use it in other modules"""
         return HBNBCommand.__classes
 
-    def do_quit(self, args):
+    def do_quit(self):
         """
         Quit the interpreter.
-
         This command allows the user to exit the interpreter gracefully.
-
-        Args:
-            args (str): Any additional arguments passed with the command.
-
-        Returns:
-            bool: True to exit the interpreter.
         """
-        print("Quitting")
-        return True
+        exit()
 
     def help_quit(self):
         """
@@ -101,21 +93,13 @@ class HBNBCommand(cmd.Cmd):
         print("quit command to exit the interpreter")
         print("Usage: quit")
 
-    def do_EOF(self, args):
+    def do_EOF(self):
         """
         Quit the interpreter.
-
         This command allows the user to exit the interpreter
         gracefully using the EOF (End of File) input.
-
-        Args:
-            args (str): Any additional arguments passed with the command.
-
-        Returns:
-            bool: True to exit the interpreter.
         """
-        print("Quitting")
-        return True
+        exit()
 
     def help_EOF(self):
         """
@@ -382,5 +366,5 @@ class HBNBCommand(cmd.Cmd):
         """
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     HBNBCommand().cmdloop()

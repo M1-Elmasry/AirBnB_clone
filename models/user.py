@@ -2,9 +2,12 @@
 """
 representing the User class
 
-This module defines the `User` class, which inherits from the `BaseModel` class.
-The `User` class represents user objects and includes attributes for email, password, first name, and last name.
-It provides methods for object initialization and can be used to create, update, and manage user objects.
+This module defines the `User` class,
+which inherits from the `BaseModel` class.
+The `User` class represents user objects and includes
+attributes for email, password, first name, and last name.
+It provides methods for object initialization and can be used
+to create, update, and manage user objects.
 """
 
 from models.base_model import BaseModel
@@ -12,8 +15,10 @@ from models.base_model import BaseModel
 
 class User(BaseModel):
     """
-    The `User` class represents user objects and includes attributes for email, password, first name, and last name.
-    It provides methods for object initialization and can be used to create, update, and manage user objects.
+    The `User` class represents user objects and includes
+    attributes for email, password, first name, and last name.
+    It provides methods for object initialization and can be used
+    to create, update, and manage user objects.
 
     Class Attributes:
         email (str): The email address of the user.

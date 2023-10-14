@@ -61,7 +61,7 @@ class BaseModel:
         and saves the object to storage.
         This method should be called whenever you make changes to the object.
         """
-        updated_at = datetime.now()
+        self.updated_at = datetime.now()
         storage.save()
 
     def to_dict(self):

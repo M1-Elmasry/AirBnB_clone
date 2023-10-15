@@ -16,9 +16,9 @@ such as BaseModel, User, City, Place, Review, State, and Amenity,
 and uses the storage module to manage data storage and retrieval.
 """
 
+import re
 import sys
 import cmd
-from models import amenity
 from models.amenity import Amenity
 from models.base_model import BaseModel
 from models.city import City
@@ -180,9 +180,8 @@ class HBNBCommand(cmd.Cmd):
         """
         Display help information for the 'show' command.
         """
-        print(
-            "Prints the str repr of an instance based on the class name and id"
-        )
+        print("Prints the str repr of an instance")
+        print("based on the class name and id")
         print("Usage: show <class> <id>")
 
     def do_destroy(self, args):
@@ -254,7 +253,7 @@ class HBNBCommand(cmd.Cmd):
                     ]
                 )
             except KeyError:
-                print("* class doesn't exist **")
+                print("** class doesn't exist **")
                 return
 
     def help_all(self):
@@ -307,7 +306,7 @@ class HBNBCommand(cmd.Cmd):
             return
 
         if len_spltd_args < 4:
-            print("* value missing **")
+            print("** value missing **")
             return
 
         attr_name = splitted_args[2]
@@ -336,7 +335,7 @@ class HBNBCommand(cmd.Cmd):
                     attr_type(" ".join(attr_value).strip("'\"")),
                 )
                 needed_obj.save()
-            except AttributeError:
+            except KeyError:
                 # if the attr not exists in the object
                 # and the name of it not exists in (HBNBCommand.__types)
                 setattr(
@@ -354,6 +353,35 @@ class HBNBCommand(cmd.Cmd):
         print("by adding or updating attribute")
         print("Usage: update <class> <id> <attribute> <value>")
 
+    def do_count(self, args):
+        """
+        write docs
+        """
+        splitted_args = args.split(" ")
+        objects = storage.all()
+
+        if splitted_args[0] == "":
+            print("** class name missing **")
+            return
+        else:
+            try:
+                cls_name = splitted_args[0]
+                HBNBCommand.__classes[cls_name]
+                print(
+                    "{}".format(
+                        len(
+                            [
+                                1
+                                for i in objects.keys()
+                                if i.startswith(f"{cls_name}")
+                            ]
+                        )
+                    )
+                )
+            except KeyError:
+                print("** class doesn't exist **")
+                return
+
     def emptyline(self):
         """
         Do nothing when an empty line is entered.
@@ -362,9 +390,21 @@ class HBNBCommand(cmd.Cmd):
 
     def default(self, args):
         """
-        Do nothing for unrecognized commands.
+        Do for unrecognized commands.
         """
+        methods = ["update", "all", "show", "create", "destroy", "count"]
+        # match syntax like this "<class>.<method>(<args>)"
+        # method should from @methods
+        pattern = r"^([a-zA-Z0-9]*)\.(" + "|".join(methods) + r")\((.*)\)$"
+        match = re.match(pattern, args)
+        if match:
+            class_name = match.group(1)
+            method_name = match.group(2)
+            input_args = match.group(3)
+            HBNBCommand().onecmd(f"{method_name} {class_name} {input_args}")
+        else:
+            pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     HBNBCommand().cmdloop()
